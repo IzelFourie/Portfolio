@@ -1,0 +1,17 @@
+---
+title: "Welcome To My Porftfolio"
+author: "Izel Fourie Sørensen"
+date: "2024-09-25"
+categories: [intro]
+image: "koningskandelaar.jpg"
+---
+
+Welcome to my portfolio created with Quarto 😀! 
+
+I created this portfolio to practice and improve my data analysis or data science skills, while simultaneously building a showcase of my work.
+
+I’d like to give credit to Deepsha Menghani for the instructions I followed to create this portfolio. You can find her guide [here](https://deepshamenghani.quarto.pub/portfolio-with-quarto-workshop/#/title-slide).
+
+This picture has nothing to do with data analysis - I just think it is a very special flower. It is called "Koningskandelaar" (among other names), it flowers in March in the Western Cape province of South Africa. It's scientific name is Brunsvigia orientalis (L.) Aiton ex Eckl.
+
+![](koningskandelaar.jpg){width=70% height=70%}

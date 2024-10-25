@@ -1,0 +1,25 @@
+---
+title: "Izel Fourie Sørensen"
+image: images/izel_picture.png
+about:
+  template: jolla
+  image-width: 20em
+  image-shape: round
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com/in/izel-fourie-sørensen
+    - icon: github
+      text: Github
+      href: https://github.com/IzelFourie
+---
+
+I am passionate about working with data to uncover meaningful insights that can inform decision-making. With a degree in Pharmacy, PhD in Pharmaceutical Chemistry and professional bachelor's degree in Data Analysis, I bring a solid foundation in both science and data analysis.
+
+Before formalizing my data analysis skills, I gained hands-on experience in using R for data cleaning and analysis through collaborations with scientists at Aarhus University. During these collaborations, I applied statistical prediction models to both human and fruit fly genetic data, predicting phenotypes based on genetic information. (Relevant publications are listed in my resume.)
+
+This work, in addition to my degree in data analysis, has equipped me with strong skills in utilizing R for data modeling, prediction, and interpretation.
+
+Through my experience of conducting PhD and postdoctoral research, I developed critical thinking and a methodical approach to problem-solving. Furthermore, my diverse roles as a pharmacist in a retail pharmacy, a quality assurance specialist, and an associate scientist have allowed me to refine my communication skills, enabling me to effectively convey technical information to both specialists and non-specialists.
+
+My unique combination of expertise in pharmaceutical science and data analysis allows me to bridge the gap between scientific research and practical data-driven decision-making.
