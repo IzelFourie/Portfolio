@@ -8,8 +8,6 @@ title: "Resume"
 # Go to this site: chrome://settings/content/pdfDocuments and change to "Open PDFs in Chrome" in order to see the embedded PDF.
 ```
 
-<iframe 
-  width="800" 
-  height="800" 
-  src="images/Izel_Fourie_Sørensen_resume.pdf">
+<iframe width="800" height="800" src="images/Izel_Fourie_Sørensen_resume.pdf">
+
 </iframe>
