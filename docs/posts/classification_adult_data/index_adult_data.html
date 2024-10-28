@@ -124,6 +124,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
+<script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -235,7 +238,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(<span class="st">"qgg"</span>, <span class="st">"corrplot"</span>, <span class="st">"ggplot2"</span>, <span class="st">"tidyr"</span>, <span class="st">"mlbench"</span>, </span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>               <span class="st">"readr"</span>, <span class="st">"data.table"</span>, <span class="st">"naniar"</span>, <span class="st">"car"</span>, <span class="st">"caret"</span>,</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">"xgboost"</span>, <span class="st">"dplyr"</span>, <span class="st">"Matrix"</span>, <span class="st">"e1071"</span>, <span class="st">"glmnet"</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>               <span class="st">"ROCR"</span>, <span class="st">"pROC"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>               <span class="st">"ROCR"</span>, <span class="st">"pROC"</span>, <span class="st">"kableExtra"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <!-- https://www.pexels.com/photo/hands-holding-us-dollar-bills-4968656/ -->
@@ -932,9 +935,8 @@ Move all countries with that have less than 10 observations in the training data
 <span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),  </span>
 <span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),  </span>
 <span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>)</span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>                                                <span class="co">#, face = "bold") </span></span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>                      ) <span class="sc">+</span></span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">ggtitle</span>(<span class="st">"XGBoost Variable Importance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>                      ) <span class="sc">+</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">ggtitle</span>(<span class="st">"XGBoost Variable Importance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -974,37 +976,36 @@ Move all countries with that have less than 10 observations in the training data
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#~/Dropbox/Projects/Portfolio/posts/classification_adult_data</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co">#tune_svc &lt;- readRDS("/Users/Dropbox/Projects/Portfolio/posts/classification_adult_data/tune_svc.rds")</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>tune_svc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"tune_svc_new.rds"</span>)</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tune_svc)</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the best model</span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>bestmod_svc <span class="ot">&lt;-</span> tune_svc<span class="sc">$</span>best.model</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict the class and probabilities using the best model</span></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>pred_svc <span class="ot">&lt;-</span> <span class="fu">predict</span>(bestmod_svc, df_test, <span class="at">decision.values =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Create confusion matrix to evaluate the model's performance</span></span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract accuracy, precision, sensitivity and specificity</span></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>confmatrix_svc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(pred_svc, df_test<span class="sc">$</span>income, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>accuracy_svc <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>overall[<span class="st">"Accuracy"</span>])</span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>precision_svc <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Pos Pred Value"</span>]), <span class="dv">3</span>)</span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>specificity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Specificity"</span>]</span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>sensitivity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Sensitivity"</span>]</span>
-<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="do">## ROC curve</span></span>
-<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the decision values (distance from the decision boundary)</span></span>
-<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>decision_values_svc <span class="ot">&lt;-</span> <span class="fu">attributes</span>(pred_svc)<span class="sc">$</span>decision.values</span>
-<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Use ROCR package to plot the ROC curve</span></span>
-<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a prediction object using decision values and true labels</span></span>
-<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the negative of the fitted decision values so that negative values correspond to class 1 and the positive values to class 2 (ISLR p. 395).</span></span>
-<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a performance object for the ROC curve</span></span>
-<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the AUC (Area Under the Curve)</span></span>
-<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>pred_object_svc <span class="ot">&lt;-</span> <span class="fu">prediction</span>(<span class="sc">-</span>decision_values_svc, y_test_label)</span>
-<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>perf_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="st">"tpr"</span>, <span class="st">"fpr"</span>)</span>
-<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>auc_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="at">measure =</span> <span class="st">"auc"</span>)<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#tune_svc &lt;- readRDS("~/Dropbox/GitHub/Portfolio/posts/classification_adult_data/tune_svc.rds")</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>tune_svc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"tune_svc.rds"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tune_svc)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the best model</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>bestmod_svc <span class="ot">&lt;-</span> tune_svc<span class="sc">$</span>best.model</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict the class and probabilities using the best model</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>pred_svc <span class="ot">&lt;-</span> <span class="fu">predict</span>(bestmod_svc, df_test, <span class="at">decision.values =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Create confusion matrix to evaluate the model's performance</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract accuracy, precision, sensitivity and specificity</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>confmatrix_svc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(pred_svc, df_test<span class="sc">$</span>income, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>accuracy_svc <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>overall[<span class="st">"Accuracy"</span>])</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>precision_svc <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Pos Pred Value"</span>]), <span class="dv">3</span>)</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>specificity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Specificity"</span>]</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>sensitivity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Sensitivity"</span>]</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="do">## ROC curve</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the decision values (distance from the decision boundary)</span></span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>decision_values_svc <span class="ot">&lt;-</span> <span class="fu">attributes</span>(pred_svc)<span class="sc">$</span>decision.values</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Use ROCR package to plot the ROC curve</span></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a prediction object using decision values and true labels</span></span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the negative of the fitted decision values so that negative values correspond to class 1 and the positive values to class 2 (ISLR p. 395).</span></span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a performance object for the ROC curve</span></span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the AUC (Area Under the Curve)</span></span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>pred_object_svc <span class="ot">&lt;-</span> <span class="fu">prediction</span>(<span class="sc">-</span>decision_values_svc, y_test_label)</span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>perf_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="st">"tpr"</span>, <span class="st">"fpr"</span>)</span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>auc_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="at">measure =</span> <span class="st">"auc"</span>)<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Determine the importance of the variables in this model.</p>
@@ -1082,29 +1083,29 @@ Move all countries with that have less than 10 observations in the training data
 </div>
 </div>
 </div>
-<p>The figure below shows the ROC curves and AUC for the different methods.</p>
+<p>The figure below shows the ROC curves and AUC for the different methods. The ROC curves are very similar across the different methods, with XGBoost achieving the highest AUC, however just slightly higher than the other methods.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_svc, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">main =</span> <span class="st">"ROC Curves"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>)</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_xgb, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_glmf2, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_ridge, <span class="at">col =</span> <span class="st">"purple"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_glmf2, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main =</span> <span class="st">"ROC Curves"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_ridge, <span class="at">col =</span> <span class="st">"purple"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_xgb, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_svc, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a legend to the plot with AUC values</span></span>
 <span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>,</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"SVM AUC:"</span>, <span class="fu">round</span>(auc_svc, <span class="dv">3</span>)),</span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"XGBoost AUC:"</span>, <span class="fu">round</span>(auc_xgb, <span class="dv">3</span>)),</span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"Logistic Regression AUC:"</span>, <span class="fu">round</span>(auc_glmf2, <span class="dv">3</span>)),</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"Ridge Regression AUC:"</span>, <span class="fu">round</span>(auc_ridge, <span class="dv">3</span>))),</span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"green"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"purple"</span>),</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"Logistic Regression AUC:"</span>, <span class="fu">round</span>(auc_glmf2, <span class="dv">3</span>)),</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"Ridge Regression AUC:"</span>, <span class="fu">round</span>(auc_ridge, <span class="dv">3</span>)),</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"XGBoost AUC:"</span>, <span class="fu">round</span>(auc_xgb, <span class="dv">3</span>)), </span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"SVM AUC:"</span>, <span class="fu">round</span>(auc_svc, <span class="dv">3</span>))),</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"purple"</span>, <span class="st">"red"</span>, <span class="st">"green"</span>),</span>
 <span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_adult_data_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The following table shows the performance of the different methods used as measured by the metrics sensitivity, specificity and precision.</p>
+<p>The following table shows the performance of the different methods used as measured by the metrics sensitivity, specificity and precision. The results are sorted by precision, with the method achieving the highest precision (XGBoost) shown as the first row in the table.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1120,19 +1121,69 @@ Move all countries with that have less than 10 observations in the training data
 <span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> results[<span class="fu">order</span>(<span class="sc">-</span>results<span class="sc">$</span>Precision), ]</span>
 <span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Round the values for a clean display</span></span>
-<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">3</span>)</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>results <span class="sc">%&gt;%</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="st">"html"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">caption =</span> <span class="st">"Model Comparison Metrics"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>Model Comparison Metrics</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Method </th>
+   <th style="text-align:right;"> Sensitivity </th>
+   <th style="text-align:right;"> Specificity </th>
+   <th style="text-align:right;"> Precision </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> XGBoost </td>
+   <td style="text-align:right;"> 0.587 </td>
+   <td style="text-align:right;"> 0.936 </td>
+   <td style="text-align:right;"> 0.740 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Ridge Regression </td>
+   <td style="text-align:right;"> 0.555 </td>
+   <td style="text-align:right;"> 0.935 </td>
+   <td style="text-align:right;"> 0.726 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Support Vector Classifier </td>
+   <td style="text-align:right;"> 0.575 </td>
+   <td style="text-align:right;"> 0.931 </td>
+   <td style="text-align:right;"> 0.722 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Logistic Regression </td>
+   <td style="text-align:right;"> 0.585 </td>
+   <td style="text-align:right;"> 0.926 </td>
+   <td style="text-align:right;"> 0.710 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
 </div>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
-<p>Whereas logistic regression can give important information for making inferences about the importance of the different variables and their effects, XGBoost and the SVC are not designed for making direct inferences. XGBoost and the SVC are primarily predictive models that focus on maximizing predictive accuracy.</p>
+<p>Whereas logistic regression can give important information for making inferences about the importance of the different variables and their effects, XGBoost and the SVC are not designed for making direct inferences. XGBoost and the SVC are primarily predictive models that focus on maximizing predictive accuracy. However, SVC did not outperform the relatively simple logistic regression model for this task. I would not use the support vector classifier for this analysis, since it took a long time to run and did not outperform the other models on the different model metrics.</p>
+<p>It is clear that the class imbalance in the outcome variable has a big influence on the model performance, with all methods struggling to recall the positive class. The highest sensitivity achieved is 58.7% observed in the XGBoost model. Remember that some of the categorical variables have levels with relatively few observations, which may reduce a model’s ability to accurately learn patterns associated with those levels. It may therefore make sense that XGBoost showed the best performance, since tree-based models can handle rare categories better.</p>
 </section>
 <section id="skills" class="level2">
 <h2 class="anchored" data-anchor-id="skills">Skills</h2>
 <p>Statistical learning, machine learning, R-programming, Tableau and data visualization.</p>
-<p>References:<br>
-Becker, Barry and Kohavi, Ronny. (1996). Adult. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20.<br>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References:<br>
+</h2>
+<p>Becker, Barry and Kohavi, Ronny. (1996). Adult. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20.<br>
 James, G., Witten, D., Hastie, T. og Tibshirani, R. 2021. An Introduction to Statistical Learning (ISLR): with Applications in R. Available at: https://link.springer.com/content/pdf/10. 1007/978-1-0716-1418-1.pdf.</p>
 
 
@@ -1366,7 +1417,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb49-45"><a href="#cb49-45" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(<span class="st">"qgg"</span>, <span class="st">"corrplot"</span>, <span class="st">"ggplot2"</span>, <span class="st">"tidyr"</span>, <span class="st">"mlbench"</span>, </span>
 <span id="cb49-46"><a href="#cb49-46" aria-hidden="true" tabindex="-1"></a>               <span class="st">"readr"</span>, <span class="st">"data.table"</span>, <span class="st">"naniar"</span>, <span class="st">"car"</span>, <span class="st">"caret"</span>,</span>
 <span id="cb49-47"><a href="#cb49-47" aria-hidden="true" tabindex="-1"></a>                <span class="st">"xgboost"</span>, <span class="st">"dplyr"</span>, <span class="st">"Matrix"</span>, <span class="st">"e1071"</span>, <span class="st">"glmnet"</span>,</span>
-<span id="cb49-48"><a href="#cb49-48" aria-hidden="true" tabindex="-1"></a>               <span class="st">"ROCR"</span>, <span class="st">"pROC"</span>)</span>
+<span id="cb49-48"><a href="#cb49-48" aria-hidden="true" tabindex="-1"></a>               <span class="st">"ROCR"</span>, <span class="st">"pROC"</span>, <span class="st">"kableExtra"</span>)</span>
 <span id="cb49-49"><a href="#cb49-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb49-50"><a href="#cb49-50" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-51"><a href="#cb49-51" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- https://www.pexels.com/photo/hands-holding-us-dollar-bills-4968656/ --&gt;</span></span>
@@ -2055,147 +2106,156 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb49-798"><a href="#cb49-798" aria-hidden="true" tabindex="-1"></a>Since the cross-validation for different values takes quite some time, I save the results for easy loading. I use the cost value that gives the smallest error for subsequent predictions.</span>
 <span id="cb49-799"><a href="#cb49-799" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-802"><a href="#cb49-802" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb49-803"><a href="#cb49-803" aria-hidden="true" tabindex="-1"></a><span class="co">#~/Dropbox/Projects/Portfolio/posts/classification_adult_data</span></span>
-<span id="cb49-804"><a href="#cb49-804" aria-hidden="true" tabindex="-1"></a><span class="co">#tune_svc &lt;- readRDS("/Users/Dropbox/Projects/Portfolio/posts/classification_adult_data/tune_svc.rds")</span></span>
-<span id="cb49-805"><a href="#cb49-805" aria-hidden="true" tabindex="-1"></a>tune_svc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"tune_svc_new.rds"</span>)</span>
-<span id="cb49-806"><a href="#cb49-806" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tune_svc)</span>
-<span id="cb49-807"><a href="#cb49-807" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-808"><a href="#cb49-808" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the best model</span></span>
-<span id="cb49-809"><a href="#cb49-809" aria-hidden="true" tabindex="-1"></a>bestmod_svc <span class="ot">&lt;-</span> tune_svc<span class="sc">$</span>best.model</span>
-<span id="cb49-810"><a href="#cb49-810" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-811"><a href="#cb49-811" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict the class and probabilities using the best model</span></span>
-<span id="cb49-812"><a href="#cb49-812" aria-hidden="true" tabindex="-1"></a>pred_svc <span class="ot">&lt;-</span> <span class="fu">predict</span>(bestmod_svc, df_test, <span class="at">decision.values =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb49-813"><a href="#cb49-813" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-814"><a href="#cb49-814" aria-hidden="true" tabindex="-1"></a><span class="do">## Create confusion matrix to evaluate the model's performance</span></span>
-<span id="cb49-815"><a href="#cb49-815" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract accuracy, precision, sensitivity and specificity</span></span>
-<span id="cb49-816"><a href="#cb49-816" aria-hidden="true" tabindex="-1"></a>confmatrix_svc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(pred_svc, df_test<span class="sc">$</span>income, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
-<span id="cb49-817"><a href="#cb49-817" aria-hidden="true" tabindex="-1"></a>accuracy_svc <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>overall[<span class="st">"Accuracy"</span>])</span>
-<span id="cb49-818"><a href="#cb49-818" aria-hidden="true" tabindex="-1"></a>precision_svc <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Pos Pred Value"</span>]), <span class="dv">3</span>)</span>
-<span id="cb49-819"><a href="#cb49-819" aria-hidden="true" tabindex="-1"></a>specificity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Specificity"</span>]</span>
-<span id="cb49-820"><a href="#cb49-820" aria-hidden="true" tabindex="-1"></a>sensitivity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Sensitivity"</span>]</span>
-<span id="cb49-821"><a href="#cb49-821" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-822"><a href="#cb49-822" aria-hidden="true" tabindex="-1"></a><span class="do">## ROC curve</span></span>
-<span id="cb49-823"><a href="#cb49-823" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the decision values (distance from the decision boundary)</span></span>
-<span id="cb49-824"><a href="#cb49-824" aria-hidden="true" tabindex="-1"></a>decision_values_svc <span class="ot">&lt;-</span> <span class="fu">attributes</span>(pred_svc)<span class="sc">$</span>decision.values</span>
-<span id="cb49-825"><a href="#cb49-825" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-826"><a href="#cb49-826" aria-hidden="true" tabindex="-1"></a><span class="co"># Use ROCR package to plot the ROC curve</span></span>
-<span id="cb49-827"><a href="#cb49-827" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a prediction object using decision values and true labels</span></span>
-<span id="cb49-828"><a href="#cb49-828" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the negative of the fitted decision values so that negative values correspond to class 1 and the positive values to class 2 (ISLR p. 395).</span></span>
-<span id="cb49-829"><a href="#cb49-829" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a performance object for the ROC curve</span></span>
-<span id="cb49-830"><a href="#cb49-830" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the AUC (Area Under the Curve)</span></span>
-<span id="cb49-831"><a href="#cb49-831" aria-hidden="true" tabindex="-1"></a>pred_object_svc <span class="ot">&lt;-</span> <span class="fu">prediction</span>(<span class="sc">-</span>decision_values_svc, y_test_label)</span>
-<span id="cb49-832"><a href="#cb49-832" aria-hidden="true" tabindex="-1"></a>perf_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="st">"tpr"</span>, <span class="st">"fpr"</span>)</span>
-<span id="cb49-833"><a href="#cb49-833" aria-hidden="true" tabindex="-1"></a>auc_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="at">measure =</span> <span class="st">"auc"</span>)<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
-<span id="cb49-834"><a href="#cb49-834" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-835"><a href="#cb49-835" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-836"><a href="#cb49-836" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-837"><a href="#cb49-837" aria-hidden="true" tabindex="-1"></a>Determine the importance of the variables in this model.</span>
-<span id="cb49-838"><a href="#cb49-838" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-841"><a href="#cb49-841" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb49-842"><a href="#cb49-842" aria-hidden="true" tabindex="-1"></a><span class="co"># Determine the importance of the different variables in the model</span></span>
-<span id="cb49-843"><a href="#cb49-843" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the coefficients (weights) and support vectors, multiplying them gives the final coefficient (weight) for each feature in the decision boundary.</span></span>
-<span id="cb49-844"><a href="#cb49-844" aria-hidden="true" tabindex="-1"></a>svc_coefficients <span class="ot">&lt;-</span> <span class="fu">t</span>(bestmod_svc<span class="sc">$</span>coefs) <span class="sc">%*%</span> bestmod_svc<span class="sc">$</span>SV</span>
-<span id="cb49-845"><a href="#cb49-845" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-846"><a href="#cb49-846" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the coefficients and the names</span></span>
-<span id="cb49-847"><a href="#cb49-847" aria-hidden="true" tabindex="-1"></a>svc_coeff_values <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(svc_coefficients)</span>
-<span id="cb49-848"><a href="#cb49-848" aria-hidden="true" tabindex="-1"></a>variable_names <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(svc_coefficients)[[<span class="dv">2</span>]]</span>
-<span id="cb49-849"><a href="#cb49-849" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-850"><a href="#cb49-850" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the names and coefficients into a named vector</span></span>
-<span id="cb49-851"><a href="#cb49-851" aria-hidden="true" tabindex="-1"></a><span class="co"># Remember that in this case:</span></span>
-<span id="cb49-852"><a href="#cb49-852" aria-hidden="true" tabindex="-1"></a><span class="co"># Positive coefficients (in the output from my SVM model) will push the decision toward the negative class.</span></span>
-<span id="cb49-853"><a href="#cb49-853" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative coefficients will push the decision toward the positive class.</span></span>
-<span id="cb49-854"><a href="#cb49-854" aria-hidden="true" tabindex="-1"></a>svc_coefficients_named <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="sc">-</span>svc_coeff_values, variable_names)</span>
-<span id="cb49-855"><a href="#cb49-855" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-856"><a href="#cb49-856" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the coefficients by their absolute values, keeping the names intact</span></span>
-<span id="cb49-857"><a href="#cb49-857" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the top 20 largest estimates (based on absolute values)</span></span>
-<span id="cb49-858"><a href="#cb49-858" aria-hidden="true" tabindex="-1"></a>svc_coefficients_ordered <span class="ot">&lt;-</span> svc_coefficients_named[<span class="fu">order</span>(<span class="fu">abs</span>(svc_coefficients_named), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)]</span>
-<span id="cb49-859"><a href="#cb49-859" aria-hidden="true" tabindex="-1"></a>importance_svc_top20 <span class="ot">&lt;-</span> svc_coefficients_ordered[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span>
-<span id="cb49-860"><a href="#cb49-860" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb49-861"><a href="#cb49-861" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the named vector of top 20 into a dataframe for plotting</span></span>
-<span id="cb49-862"><a href="#cb49-862" aria-hidden="true" tabindex="-1"></a>importance_svc_top20 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb49-863"><a href="#cb49-863" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(importance_svc_top20),</span>
-<span id="cb49-864"><a href="#cb49-864" aria-hidden="true" tabindex="-1"></a>  <span class="at">Coefficient =</span> importance_svc_top20</span>
-<span id="cb49-865"><a href="#cb49-865" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-866"><a href="#cb49-866" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb49-867"><a href="#cb49-867" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar plot with the actual values (not the absolute ones)</span></span>
-<span id="cb49-868"><a href="#cb49-868" aria-hidden="true" tabindex="-1"></a>importance_plot_svc <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(importance_svc_top20, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Variable, <span class="fu">abs</span>(Coefficient)), <span class="at">y =</span> Coefficient)) <span class="sc">+</span></span>
-<span id="cb49-869"><a href="#cb49-869" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">ifelse</span>(Coefficient <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"Positive"</span>, <span class="st">"Negative"</span>))) <span class="sc">+</span></span>
-<span id="cb49-870"><a href="#cb49-870" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb49-871"><a href="#cb49-871" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SVC Variable Importance"</span>, </span>
-<span id="cb49-872"><a href="#cb49-872" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Variables"</span>, </span>
-<span id="cb49-873"><a href="#cb49-873" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Coefficient Value"</span>) <span class="sc">+</span></span>
-<span id="cb49-874"><a href="#cb49-874" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb49-875"><a href="#cb49-875" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Negative"</span> <span class="ot">=</span> <span class="st">"darkorange"</span>, <span class="st">"Positive"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb49-876"><a href="#cb49-876" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),  </span>
-<span id="cb49-877"><a href="#cb49-877" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>))</span>
+<span id="cb49-803"><a href="#cb49-803" aria-hidden="true" tabindex="-1"></a><span class="co">#tune_svc &lt;- readRDS("~/Dropbox/GitHub/Portfolio/posts/classification_adult_data/tune_svc.rds")</span></span>
+<span id="cb49-804"><a href="#cb49-804" aria-hidden="true" tabindex="-1"></a>tune_svc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"tune_svc.rds"</span>)</span>
+<span id="cb49-805"><a href="#cb49-805" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tune_svc)</span>
+<span id="cb49-806"><a href="#cb49-806" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-807"><a href="#cb49-807" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the best model</span></span>
+<span id="cb49-808"><a href="#cb49-808" aria-hidden="true" tabindex="-1"></a>bestmod_svc <span class="ot">&lt;-</span> tune_svc<span class="sc">$</span>best.model</span>
+<span id="cb49-809"><a href="#cb49-809" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-810"><a href="#cb49-810" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict the class and probabilities using the best model</span></span>
+<span id="cb49-811"><a href="#cb49-811" aria-hidden="true" tabindex="-1"></a>pred_svc <span class="ot">&lt;-</span> <span class="fu">predict</span>(bestmod_svc, df_test, <span class="at">decision.values =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-812"><a href="#cb49-812" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-813"><a href="#cb49-813" aria-hidden="true" tabindex="-1"></a><span class="do">## Create confusion matrix to evaluate the model's performance</span></span>
+<span id="cb49-814"><a href="#cb49-814" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract accuracy, precision, sensitivity and specificity</span></span>
+<span id="cb49-815"><a href="#cb49-815" aria-hidden="true" tabindex="-1"></a>confmatrix_svc <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(pred_svc, df_test<span class="sc">$</span>income, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb49-816"><a href="#cb49-816" aria-hidden="true" tabindex="-1"></a>accuracy_svc <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>overall[<span class="st">"Accuracy"</span>])</span>
+<span id="cb49-817"><a href="#cb49-817" aria-hidden="true" tabindex="-1"></a>precision_svc <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Pos Pred Value"</span>]), <span class="dv">3</span>)</span>
+<span id="cb49-818"><a href="#cb49-818" aria-hidden="true" tabindex="-1"></a>specificity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Specificity"</span>]</span>
+<span id="cb49-819"><a href="#cb49-819" aria-hidden="true" tabindex="-1"></a>sensitivity_svc <span class="ot">&lt;-</span> confmatrix_svc<span class="sc">$</span>byClass[<span class="st">"Sensitivity"</span>]</span>
+<span id="cb49-820"><a href="#cb49-820" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-821"><a href="#cb49-821" aria-hidden="true" tabindex="-1"></a><span class="do">## ROC curve</span></span>
+<span id="cb49-822"><a href="#cb49-822" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the decision values (distance from the decision boundary)</span></span>
+<span id="cb49-823"><a href="#cb49-823" aria-hidden="true" tabindex="-1"></a>decision_values_svc <span class="ot">&lt;-</span> <span class="fu">attributes</span>(pred_svc)<span class="sc">$</span>decision.values</span>
+<span id="cb49-824"><a href="#cb49-824" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-825"><a href="#cb49-825" aria-hidden="true" tabindex="-1"></a><span class="co"># Use ROCR package to plot the ROC curve</span></span>
+<span id="cb49-826"><a href="#cb49-826" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a prediction object using decision values and true labels</span></span>
+<span id="cb49-827"><a href="#cb49-827" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the negative of the fitted decision values so that negative values correspond to class 1 and the positive values to class 2 (ISLR p. 395).</span></span>
+<span id="cb49-828"><a href="#cb49-828" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a performance object for the ROC curve</span></span>
+<span id="cb49-829"><a href="#cb49-829" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the AUC (Area Under the Curve)</span></span>
+<span id="cb49-830"><a href="#cb49-830" aria-hidden="true" tabindex="-1"></a>pred_object_svc <span class="ot">&lt;-</span> <span class="fu">prediction</span>(<span class="sc">-</span>decision_values_svc, y_test_label)</span>
+<span id="cb49-831"><a href="#cb49-831" aria-hidden="true" tabindex="-1"></a>perf_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="st">"tpr"</span>, <span class="st">"fpr"</span>)</span>
+<span id="cb49-832"><a href="#cb49-832" aria-hidden="true" tabindex="-1"></a>auc_svc <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_object_svc, <span class="at">measure =</span> <span class="st">"auc"</span>)<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb49-833"><a href="#cb49-833" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-834"><a href="#cb49-834" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb49-835"><a href="#cb49-835" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-836"><a href="#cb49-836" aria-hidden="true" tabindex="-1"></a>Determine the importance of the variables in this model.</span>
+<span id="cb49-837"><a href="#cb49-837" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-840"><a href="#cb49-840" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb49-841"><a href="#cb49-841" aria-hidden="true" tabindex="-1"></a><span class="co"># Determine the importance of the different variables in the model</span></span>
+<span id="cb49-842"><a href="#cb49-842" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the coefficients (weights) and support vectors, multiplying them gives the final coefficient (weight) for each feature in the decision boundary.</span></span>
+<span id="cb49-843"><a href="#cb49-843" aria-hidden="true" tabindex="-1"></a>svc_coefficients <span class="ot">&lt;-</span> <span class="fu">t</span>(bestmod_svc<span class="sc">$</span>coefs) <span class="sc">%*%</span> bestmod_svc<span class="sc">$</span>SV</span>
+<span id="cb49-844"><a href="#cb49-844" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-845"><a href="#cb49-845" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the coefficients and the names</span></span>
+<span id="cb49-846"><a href="#cb49-846" aria-hidden="true" tabindex="-1"></a>svc_coeff_values <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(svc_coefficients)</span>
+<span id="cb49-847"><a href="#cb49-847" aria-hidden="true" tabindex="-1"></a>variable_names <span class="ot">&lt;-</span> <span class="fu">dimnames</span>(svc_coefficients)[[<span class="dv">2</span>]]</span>
+<span id="cb49-848"><a href="#cb49-848" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-849"><a href="#cb49-849" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the names and coefficients into a named vector</span></span>
+<span id="cb49-850"><a href="#cb49-850" aria-hidden="true" tabindex="-1"></a><span class="co"># Remember that in this case:</span></span>
+<span id="cb49-851"><a href="#cb49-851" aria-hidden="true" tabindex="-1"></a><span class="co"># Positive coefficients (in the output from my SVM model) will push the decision toward the negative class.</span></span>
+<span id="cb49-852"><a href="#cb49-852" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative coefficients will push the decision toward the positive class.</span></span>
+<span id="cb49-853"><a href="#cb49-853" aria-hidden="true" tabindex="-1"></a>svc_coefficients_named <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="sc">-</span>svc_coeff_values, variable_names)</span>
+<span id="cb49-854"><a href="#cb49-854" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-855"><a href="#cb49-855" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the coefficients by their absolute values, keeping the names intact</span></span>
+<span id="cb49-856"><a href="#cb49-856" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the top 20 largest estimates (based on absolute values)</span></span>
+<span id="cb49-857"><a href="#cb49-857" aria-hidden="true" tabindex="-1"></a>svc_coefficients_ordered <span class="ot">&lt;-</span> svc_coefficients_named[<span class="fu">order</span>(<span class="fu">abs</span>(svc_coefficients_named), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)]</span>
+<span id="cb49-858"><a href="#cb49-858" aria-hidden="true" tabindex="-1"></a>importance_svc_top20 <span class="ot">&lt;-</span> svc_coefficients_ordered[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span>
+<span id="cb49-859"><a href="#cb49-859" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-860"><a href="#cb49-860" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the named vector of top 20 into a dataframe for plotting</span></span>
+<span id="cb49-861"><a href="#cb49-861" aria-hidden="true" tabindex="-1"></a>importance_svc_top20 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb49-862"><a href="#cb49-862" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">names</span>(importance_svc_top20),</span>
+<span id="cb49-863"><a href="#cb49-863" aria-hidden="true" tabindex="-1"></a>  <span class="at">Coefficient =</span> importance_svc_top20</span>
+<span id="cb49-864"><a href="#cb49-864" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-865"><a href="#cb49-865" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-866"><a href="#cb49-866" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar plot with the actual values (not the absolute ones)</span></span>
+<span id="cb49-867"><a href="#cb49-867" aria-hidden="true" tabindex="-1"></a>importance_plot_svc <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(importance_svc_top20, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Variable, <span class="fu">abs</span>(Coefficient)), <span class="at">y =</span> Coefficient)) <span class="sc">+</span></span>
+<span id="cb49-868"><a href="#cb49-868" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">ifelse</span>(Coefficient <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"Positive"</span>, <span class="st">"Negative"</span>))) <span class="sc">+</span></span>
+<span id="cb49-869"><a href="#cb49-869" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb49-870"><a href="#cb49-870" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SVC Variable Importance"</span>, </span>
+<span id="cb49-871"><a href="#cb49-871" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Variables"</span>, </span>
+<span id="cb49-872"><a href="#cb49-872" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Coefficient Value"</span>) <span class="sc">+</span></span>
+<span id="cb49-873"><a href="#cb49-873" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb49-874"><a href="#cb49-874" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Negative"</span> <span class="ot">=</span> <span class="st">"darkorange"</span>, <span class="st">"Positive"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb49-875"><a href="#cb49-875" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),  </span>
+<span id="cb49-876"><a href="#cb49-876" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>))</span>
+<span id="cb49-877"><a href="#cb49-877" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-878"><a href="#cb49-878" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-879"><a href="#cb49-879" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-880"><a href="#cb49-880" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-881"><a href="#cb49-881" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-882"><a href="#cb49-882" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results</span></span>
-<span id="cb49-883"><a href="#cb49-883" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-884"><a href="#cb49-884" aria-hidden="true" tabindex="-1"></a>The main goal of this post is to identify which statistical method performs best in predicting annual income in the adult census data. Nevertheless, I still think it is interesting to look at the variable importance across the different methods.</span>
-<span id="cb49-885"><a href="#cb49-885" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-886"><a href="#cb49-886" aria-hidden="true" tabindex="-1"></a>The figures below show the 20 most important variables in the different methods used.</span>
-<span id="cb49-887"><a href="#cb49-887" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-890"><a href="#cb49-890" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb49-891"><a href="#cb49-891" aria-hidden="true" tabindex="-1"></a><span class="co">#| layout-ncol: 2</span></span>
-<span id="cb49-892"><a href="#cb49-892" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-893"><a href="#cb49-893" aria-hidden="true" tabindex="-1"></a>importance_plot_glm</span>
-<span id="cb49-894"><a href="#cb49-894" aria-hidden="true" tabindex="-1"></a>importance_plot_ridge</span>
-<span id="cb49-895"><a href="#cb49-895" aria-hidden="true" tabindex="-1"></a>importance_plot_xgb</span>
-<span id="cb49-896"><a href="#cb49-896" aria-hidden="true" tabindex="-1"></a>importance_plot_svc</span>
-<span id="cb49-897"><a href="#cb49-897" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-898"><a href="#cb49-898" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-899"><a href="#cb49-899" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-900"><a href="#cb49-900" aria-hidden="true" tabindex="-1"></a>The figure below shows the ROC curves and AUC for the different methods.</span>
-<span id="cb49-901"><a href="#cb49-901" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-904"><a href="#cb49-904" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb49-905"><a href="#cb49-905" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_svc, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">main =</span> <span class="st">"ROC Curves"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>)</span>
+<span id="cb49-879"><a href="#cb49-879" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb49-880"><a href="#cb49-880" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-881"><a href="#cb49-881" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results</span></span>
+<span id="cb49-882"><a href="#cb49-882" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-883"><a href="#cb49-883" aria-hidden="true" tabindex="-1"></a>The main goal of this post is to identify which statistical method performs best in predicting annual income in the adult census data. Nevertheless, I still think it is interesting to look at the variable importance across the different methods.</span>
+<span id="cb49-884"><a href="#cb49-884" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-885"><a href="#cb49-885" aria-hidden="true" tabindex="-1"></a>The figures below show the 20 most important variables in the different methods used.</span>
+<span id="cb49-886"><a href="#cb49-886" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-889"><a href="#cb49-889" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb49-890"><a href="#cb49-890" aria-hidden="true" tabindex="-1"></a><span class="co">#| layout-ncol: 2</span></span>
+<span id="cb49-891"><a href="#cb49-891" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-892"><a href="#cb49-892" aria-hidden="true" tabindex="-1"></a>importance_plot_glm</span>
+<span id="cb49-893"><a href="#cb49-893" aria-hidden="true" tabindex="-1"></a>importance_plot_ridge</span>
+<span id="cb49-894"><a href="#cb49-894" aria-hidden="true" tabindex="-1"></a>importance_plot_xgb</span>
+<span id="cb49-895"><a href="#cb49-895" aria-hidden="true" tabindex="-1"></a>importance_plot_svc</span>
+<span id="cb49-896"><a href="#cb49-896" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-897"><a href="#cb49-897" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb49-898"><a href="#cb49-898" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-899"><a href="#cb49-899" aria-hidden="true" tabindex="-1"></a>The figure below shows the ROC curves and AUC for the different methods. The ROC curves are very similar across the different methods, with XGBoost achieving the highest AUC, however just slightly higher than the other methods. </span>
+<span id="cb49-900"><a href="#cb49-900" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-903"><a href="#cb49-903" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb49-904"><a href="#cb49-904" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_glmf2, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main =</span> <span class="st">"ROC Curves"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>)</span>
+<span id="cb49-905"><a href="#cb49-905" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_ridge, <span class="at">col =</span> <span class="st">"purple"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb49-906"><a href="#cb49-906" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_xgb, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb49-907"><a href="#cb49-907" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_glmf2, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb49-908"><a href="#cb49-908" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_ridge, <span class="at">col =</span> <span class="st">"purple"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb49-909"><a href="#cb49-909" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-910"><a href="#cb49-910" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a legend to the plot with AUC values</span></span>
-<span id="cb49-911"><a href="#cb49-911" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>,</span>
-<span id="cb49-912"><a href="#cb49-912" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"SVM AUC:"</span>, <span class="fu">round</span>(auc_svc, <span class="dv">3</span>)),</span>
-<span id="cb49-913"><a href="#cb49-913" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"XGBoost AUC:"</span>, <span class="fu">round</span>(auc_xgb, <span class="dv">3</span>)),</span>
-<span id="cb49-914"><a href="#cb49-914" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"Logistic Regression AUC:"</span>, <span class="fu">round</span>(auc_glmf2, <span class="dv">3</span>)),</span>
-<span id="cb49-915"><a href="#cb49-915" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"Ridge Regression AUC:"</span>, <span class="fu">round</span>(auc_ridge, <span class="dv">3</span>))),</span>
-<span id="cb49-916"><a href="#cb49-916" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"green"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"purple"</span>),</span>
-<span id="cb49-917"><a href="#cb49-917" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb49-918"><a href="#cb49-918" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-919"><a href="#cb49-919" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-920"><a href="#cb49-920" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-921"><a href="#cb49-921" aria-hidden="true" tabindex="-1"></a>The following table shows the performance of the different methods used as measured by the metrics sensitivity, specificity and precision.</span>
-<span id="cb49-922"><a href="#cb49-922" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-925"><a href="#cb49-925" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb49-926"><a href="#cb49-926" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect all the results in a data frame</span></span>
-<span id="cb49-927"><a href="#cb49-927" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb49-928"><a href="#cb49-928" aria-hidden="true" tabindex="-1"></a>  <span class="at">Method =</span> <span class="fu">c</span>(<span class="st">"Logistic Regression"</span>, <span class="st">"Ridge Regression"</span>, <span class="st">"XGBoost"</span>, <span class="st">"Support Vector Classifier"</span>),</span>
-<span id="cb49-929"><a href="#cb49-929" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sensitivity =</span> <span class="fu">c</span>(sensitivity_glmf2, sensitivity_ridge, sensitivity_xgb1, sensitivity_svc),</span>
-<span id="cb49-930"><a href="#cb49-930" aria-hidden="true" tabindex="-1"></a>  <span class="at">Specificity =</span> <span class="fu">c</span>(specificity_glmf2, specificity_ridge, specificity_xgb1, specificity_svc),</span>
-<span id="cb49-931"><a href="#cb49-931" aria-hidden="true" tabindex="-1"></a>  <span class="at">Precision =</span> <span class="fu">c</span>(precision_glmf2, precision_ridge, precision_xgb1, precision_svc)</span>
-<span id="cb49-932"><a href="#cb49-932" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-933"><a href="#cb49-933" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-934"><a href="#cb49-934" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results by Precision in descending order</span></span>
-<span id="cb49-935"><a href="#cb49-935" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> results[<span class="fu">order</span>(<span class="sc">-</span>results<span class="sc">$</span>Precision), ]</span>
-<span id="cb49-936"><a href="#cb49-936" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-937"><a href="#cb49-937" aria-hidden="true" tabindex="-1"></a><span class="co"># Round the values for a clean display</span></span>
-<span id="cb49-938"><a href="#cb49-938" aria-hidden="true" tabindex="-1"></a>results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">3</span>)</span>
-<span id="cb49-939"><a href="#cb49-939" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb49-907"><a href="#cb49-907" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf_svc, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-908"><a href="#cb49-908" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-909"><a href="#cb49-909" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a legend to the plot with AUC values</span></span>
+<span id="cb49-910"><a href="#cb49-910" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>,</span>
+<span id="cb49-911"><a href="#cb49-911" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"Logistic Regression AUC:"</span>, <span class="fu">round</span>(auc_glmf2, <span class="dv">3</span>)),</span>
+<span id="cb49-912"><a href="#cb49-912" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"Ridge Regression AUC:"</span>, <span class="fu">round</span>(auc_ridge, <span class="dv">3</span>)),</span>
+<span id="cb49-913"><a href="#cb49-913" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"XGBoost AUC:"</span>, <span class="fu">round</span>(auc_xgb, <span class="dv">3</span>)), </span>
+<span id="cb49-914"><a href="#cb49-914" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(<span class="st">"SVM AUC:"</span>, <span class="fu">round</span>(auc_svc, <span class="dv">3</span>))),</span>
+<span id="cb49-915"><a href="#cb49-915" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"purple"</span>, <span class="st">"red"</span>, <span class="st">"green"</span>),</span>
+<span id="cb49-916"><a href="#cb49-916" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb49-917"><a href="#cb49-917" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-918"><a href="#cb49-918" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb49-919"><a href="#cb49-919" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-920"><a href="#cb49-920" aria-hidden="true" tabindex="-1"></a>The following table shows the performance of the different methods used as measured by the metrics sensitivity, specificity and precision. The results are sorted by precision, with the method achieving the highest precision (XGBoost) shown as the first row in the table.</span>
+<span id="cb49-921"><a href="#cb49-921" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-924"><a href="#cb49-924" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb49-925"><a href="#cb49-925" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: markup</span></span>
+<span id="cb49-926"><a href="#cb49-926" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-927"><a href="#cb49-927" aria-hidden="true" tabindex="-1"></a><span class="co"># Collect all the results in a data frame</span></span>
+<span id="cb49-928"><a href="#cb49-928" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb49-929"><a href="#cb49-929" aria-hidden="true" tabindex="-1"></a>  <span class="at">Method =</span> <span class="fu">c</span>(<span class="st">"Logistic Regression"</span>, <span class="st">"Ridge Regression"</span>, <span class="st">"XGBoost"</span>, <span class="st">"Support Vector Classifier"</span>),</span>
+<span id="cb49-930"><a href="#cb49-930" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sensitivity =</span> <span class="fu">c</span>(sensitivity_glmf2, sensitivity_ridge, sensitivity_xgb1, sensitivity_svc),</span>
+<span id="cb49-931"><a href="#cb49-931" aria-hidden="true" tabindex="-1"></a>  <span class="at">Specificity =</span> <span class="fu">c</span>(specificity_glmf2, specificity_ridge, specificity_xgb1, specificity_svc),</span>
+<span id="cb49-932"><a href="#cb49-932" aria-hidden="true" tabindex="-1"></a>  <span class="at">Precision =</span> <span class="fu">c</span>(precision_glmf2, precision_ridge, precision_xgb1, precision_svc)</span>
+<span id="cb49-933"><a href="#cb49-933" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-934"><a href="#cb49-934" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-935"><a href="#cb49-935" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results by Precision in descending order</span></span>
+<span id="cb49-936"><a href="#cb49-936" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> results[<span class="fu">order</span>(<span class="sc">-</span>results<span class="sc">$</span>Precision), ]</span>
+<span id="cb49-937"><a href="#cb49-937" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-938"><a href="#cb49-938" aria-hidden="true" tabindex="-1"></a><span class="co"># Round the values for a clean display</span></span>
+<span id="cb49-939"><a href="#cb49-939" aria-hidden="true" tabindex="-1"></a>results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">round</span>(results[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">3</span>)</span>
 <span id="cb49-940"><a href="#cb49-940" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-941"><a href="#cb49-941" aria-hidden="true" tabindex="-1"></a><span class="fu">## Discussion</span></span>
-<span id="cb49-942"><a href="#cb49-942" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-943"><a href="#cb49-943" aria-hidden="true" tabindex="-1"></a>Whereas logistic regression can give important information for making inferences about the importance of the different variables and their effects, XGBoost and the SVC are not designed for making direct inferences. XGBoost and the SVC are primarily predictive models that focus on maximizing predictive accuracy.</span>
-<span id="cb49-944"><a href="#cb49-944" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-945"><a href="#cb49-945" aria-hidden="true" tabindex="-1"></a><span class="fu">## Skills</span></span>
+<span id="cb49-941"><a href="#cb49-941" aria-hidden="true" tabindex="-1"></a>results <span class="sc">%&gt;%</span></span>
+<span id="cb49-942"><a href="#cb49-942" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="st">"html"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">caption =</span> <span class="st">"Model Comparison Metrics"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-943"><a href="#cb49-943" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb49-944"><a href="#cb49-944" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-945"><a href="#cb49-945" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb49-946"><a href="#cb49-946" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-947"><a href="#cb49-947" aria-hidden="true" tabindex="-1"></a>Statistical learning, machine learning, R-programming, Tableau and data visualization.</span>
+<span id="cb49-947"><a href="#cb49-947" aria-hidden="true" tabindex="-1"></a><span class="fu">## Discussion</span></span>
 <span id="cb49-948"><a href="#cb49-948" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-949"><a href="#cb49-949" aria-hidden="true" tabindex="-1"></a>References:\</span>
-<span id="cb49-950"><a href="#cb49-950" aria-hidden="true" tabindex="-1"></a>Becker, Barry and Kohavi, Ronny. (1996). Adult. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20.  </span>
-<span id="cb49-951"><a href="#cb49-951" aria-hidden="true" tabindex="-1"></a>James, G., Witten, D., Hastie, T. og Tibshirani, R. 2021. An Introduction to Statistical Learning (ISLR): with Applications in R. Available at: https://link.springer.com/content/pdf/10. 1007/978-1-0716-1418-1.pdf.</span>
+<span id="cb49-949"><a href="#cb49-949" aria-hidden="true" tabindex="-1"></a>Whereas logistic regression can give important information for making inferences about the importance of the different variables and their effects, XGBoost and the SVC are not designed for making direct inferences. XGBoost and the SVC are primarily predictive models that focus on maximizing predictive accuracy. However, SVC did not outperform the relatively simple logistic regression model for this task. I would not use the support vector classifier for this analysis, since it took a long time to run and did not outperform the other models on the different model metrics.</span>
+<span id="cb49-950"><a href="#cb49-950" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-951"><a href="#cb49-951" aria-hidden="true" tabindex="-1"></a>It is clear that the class imbalance in the outcome variable has a big influence on the model performance, with all methods struggling to recall the positive class. The highest sensitivity achieved is 58.7% observed in the XGBoost model. Remember that some of the categorical variables have levels with relatively few observations, which may reduce a model's ability to accurately learn patterns associated with those levels. It may therefore make sense that XGBoost showed the best performance, since tree-based models can handle rare categories better.</span>
+<span id="cb49-952"><a href="#cb49-952" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-953"><a href="#cb49-953" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-954"><a href="#cb49-954" aria-hidden="true" tabindex="-1"></a><span class="fu">## Skills</span></span>
+<span id="cb49-955"><a href="#cb49-955" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-956"><a href="#cb49-956" aria-hidden="true" tabindex="-1"></a>Statistical learning, machine learning, R-programming, Tableau and data visualization.</span>
+<span id="cb49-957"><a href="#cb49-957" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-958"><a href="#cb49-958" aria-hidden="true" tabindex="-1"></a><span class="fu">## References:\</span></span>
+<span id="cb49-959"><a href="#cb49-959" aria-hidden="true" tabindex="-1"></a>Becker, Barry and Kohavi, Ronny. (1996). Adult. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20.  </span>
+<span id="cb49-960"><a href="#cb49-960" aria-hidden="true" tabindex="-1"></a>James, G., Witten, D., Hastie, T. og Tibshirani, R. 2021. An Introduction to Statistical Learning (ISLR): with Applications in R. Available at: https://link.springer.com/content/pdf/10. 1007/978-1-0716-1418-1.pdf.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
