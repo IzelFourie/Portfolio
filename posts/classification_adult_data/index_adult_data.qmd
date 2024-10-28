@@ -12,7 +12,6 @@ image: "pexels-karolina-grabowska-edited.jpg"
 knitr::opts_chunk$set(results = 'hide')
 ```
 
-
 ## Goal
 
 In this post I use different statistical models for predicting whether a person's annual income will exceed \$50K a year based on data in the "Census Income" data set.
@@ -26,7 +25,7 @@ In this post I use different statistical models for predicting whether a person'
 #| out.height: 30%
 
 
-knitr::include_graphics("~/Dropbox/Projects/Portfolio/posts/classification_adult_data/pexels-karolina-grabowska-edited.jpg")
+knitr::include_graphics("~/Dropbox/GitHub/Portfolio/posts/classification_adult_data/pexels-karolina-grabowska-edited.jpg")
 ```
 
 ```{r}
@@ -100,7 +99,8 @@ dim(df_train)
 df_test$income <- gsub(".", "", df_test$income, fixed=TRUE)
 
 ```
-The data consists of  `r ncol(df)` variables. The training data consists of `r nrow(df_train)` observations and the test data of `r nrow(df_test)`.
+
+The data consists of `r ncol(df)` variables. The training data consists of `r nrow(df_train)` observations and the test data of `r nrow(df_test)`.
 
 Here is a quick view of what the data looks like.
 
@@ -110,16 +110,12 @@ Here is a quick view of what the data looks like.
 head(df_train)
 ```
 
+Although I didn't want to spend too much time on explorative data analysis, I couldn't help looking at the income difference between men and women. (Just for fun I created the graph in Tableau.) The figure shows exactly what I expected: that the proportion of females earning more than \$50K would be much lower than the proportion of males. The figure also shows that there is class imbalance in the dataset, since the class income \> \$50K occurs less frequent than the other.
 
-Although I didn't want to spend too much time on explorative data analysis, I couldn't help looking at the income difference between men and women. (Just for fun I created the graph in Tableau.) The figure shows exactly what I expected: that the proportion of females earning more than \$50K would be much lower than the proportion of males. The figure also shows that there is class imbalance in the dataset, since the class income > \$50K occurs less frequent than the other.
-
-```{=html}
 <div class='tableauPlaceholder' id='viz1728455966947' style='position: relative'><noscript><a href='#'><img alt='Percentage of males and females that earned more or less than $50,000 in 1994. ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17279468755020&#47;Sheet2&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='Book1_17279468755020&#47;Sheet2' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17279468755020&#47;Sheet2&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /><param name='filter' value='publish=yes' /></object></div>                
 <script type='text/javascript'>                    
 var divElement = document.getElementById('viz1728455966947');
 var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
-
-```
 
 The figure below shows the distribution of ages for people earning more or less than \$50,000 per year. There is a clear shift towards older age for earning above \$50K. The curve suggests that in 1994 middle-aged individuals were more likely to have incomes above \$50K.
 
@@ -148,8 +144,8 @@ ggplot(df_train, aes(x = age, fill = income)) +
 
 ## Data preparation
 
-
 Join the training and test datasets so that I can edit the datasets as a whole.
+
 ```{r}
 
 # Change the character variables to factors
@@ -177,6 +173,7 @@ sum(duplicated(df) | duplicated(df, fromLast = TRUE))
 ```
 
 Look at the distribution of the numerical columns by making box plots.
+
 ```{r}
 
 # Identify numeric colummns
@@ -263,23 +260,23 @@ contingency_tables
 
 I decide to combine some of the categories for the variables workclass, education, occupation and native_country. These variables are edited as follows:
 
-*workclass*
-Working Without_pay and Never_worked is very unlikely to result in an income above >50K. I am merging these categories with the category "?".
+*workclass* Working Without_pay and Never_worked is very unlikely to result in an income above \>50K. I am merging these categories with the category "?".
+
 ```{r}
 df$workclass[df$workclass %in% c("Without-pay", "Never-worked")] <- "?" 
 table(df$income, df$workclass)
 ```
 
-*education*
-Add Preschool, and the other grades up to 9th grade and call it pre-primary-school.
+*education* Add Preschool, and the other grades up to 9th grade and call it pre-primary-school.
+
 ```{r}
 
 df$education[df$education %in% c("Preschool", "1st-4th", "5th-6th", "7th-8th", "9th")] <- "pre-primary-school"
 table(df$income, df$education)
 ```
 
-*occupation*
-Move Armed-Forces and Priv-house-serv to "?"
+*occupation* Move Armed-Forces and Priv-house-serv to "?"
+
 ```{r}
 
 df$occupation[df$occupation %in% c("Armed-Forces", "Priv-house-serv")] <- "?"
@@ -287,8 +284,8 @@ table(df$income, df$occupation)
 
 ```
 
-*native_country*
-Move all countries with that have less than 10 observations in the training data to a new category called "Other".
+*native_country* Move all countries with that have less than 10 observations in the training data to a new category called "Other".
+
 ```{r}
 # Create a contingency table of income and native_country
 contingency_table_native_country <- table(df_train$income, df_train$native_country)
@@ -304,8 +301,8 @@ df$native_country[df$native_country %in% low_count_countries] <- "Other"
 
 ```
 
-Other minor adjustments:
-Create a binary variable for income,
+Other minor adjustments: Create a binary variable for income,
+
 ```{r}
 
 df$income <- ifelse(df$income == ">50K", 1, 0)
@@ -313,6 +310,7 @@ df$income <- as.factor(df$income)
 ```
 
 and change all character variables to factors.
+
 ```{r}
 
 df[, character_vars] <- lapply(df[, character_vars], as.factor)
@@ -323,6 +321,7 @@ df[, character_vars] <- lapply(df[, character_vars], as.factor)
 ```
 
 Create the train and test datasets.
+
 ```{r}
 
 # Define train and test data indices
@@ -334,7 +333,6 @@ test <- (1:nrow(df_test))+ nrow(df_train)
 df_train <- df[train, ]
 df_test <- df[test, ]
 ```
-
 
 ## Analysis
 
@@ -348,7 +346,8 @@ I first fit a logistic regression model, including all the variables in the data
 
 The variable *education_num* has a high variable inflation factor (VIF). It is likely highly correlated with the factor variable *education*. This variable is removed in subsequent analyses.
 
-After removing the *education_num* variable, *education* becomes significant. The *workclass* variable does not seem to have a significant influence on the outcome. A Chi^2 test also reveals significant assocation between the variables *workclass* and *occupation*. I remove this variable to see if it would improve the prediction model.
+After removing the *education_num* variable, *education* becomes significant. The *workclass* variable does not seem to have a significant influence on the outcome. A Chi\^2 test also reveals significant assocation between the variables *workclass* and *occupation*. I remove this variable to see if it would improve the prediction model.
+
 ```{r}
 #| results: hide
 
@@ -485,7 +484,6 @@ theme(axis.text.x = element_text(size = 12),
 
 ```
 
-
 ### Ridge Regression {#ridge-regression}
 
 I suspect that there may still be some correlated features in the data, such as *relationship* and *marital_status*. I use Ridge regression to distribute the weight more evenly across the features. The goal of this exercise is to determine which model will give the best prediction accuracy. Thus, model simplicity is not the biggest concern.
@@ -584,7 +582,6 @@ importance_plot_ridge <- ggplot(coefficients_ridge_top_20, aes(x = reorder(Varia
 
 ```
 
-
 ### XGBoost
 
 XGBoost is a tree-based algorithm and therefore should not be particularly sensitive to collinear features.
@@ -605,7 +602,7 @@ test_xgb <- xgb.DMatrix(data = matrix_test, label = y_test_label)
 
 ```
 
-For this XGBoost model I choose parameters that should provide a good balance between model complexity and regularization. I am not going to use time on tuning this model. 
+For this XGBoost model I choose parameters that should provide a good balance between model complexity and regularization. I am not going to use time on tuning this model.
 
 ```{r}
 
@@ -688,7 +685,6 @@ importance_plot_xgb <- xgb.ggplot.importance(importance_matrix = importance_xgb,
                     ggtitle("XGBoost Variable Importance")
 ```
 
-
 ### Support Vector Classifier
 
 The support vector classifier (SVC) is a method that constructs a set of hyperplanes that separates the training data into two classes. Collinearity can degrade the performance of the classifier when using a linear kernel. *To look at the influence of redundant variables in the model, I will run an SVC model with and without the redundant variables using a linear kernel and a support vector machine model with a radial kernel where all variables are included in the model.* - REMOVE THIS
@@ -704,6 +700,7 @@ I will also perform regularization by playing around with the C tuning parameter
 <!-- A large C (less regularization) reduces the margin and penalizes violations more severely, making the classifier focus on correctly classifying all points, which may lead to overfitting. -->
 
 The best value for the cost tuning parameter (C) is determined through cross validation.
+
 ```{r}
 #| eval: false
 
@@ -809,13 +806,12 @@ importance_plot_svc <- ggplot(importance_svc_top20, aes(x = reorder(Variable, ab
 
 ```
 
-
 ## Results
 
 The main goal of this post is to identify which statistical method performs best in predicting annual income in the adult census data. Nevertheless, I still think it is interesting to look at the variable importance across the different methods.
 
-
 The figures below show the 20 most important variables in the different methods used.
+
 ```{r}
 #| layout-ncol: 2
 
@@ -864,7 +860,6 @@ results <- results[order(-results$Precision), ]
 results[, 2:4] <- round(results[, 2:4], 3)
 ```
 
-
 ## Discussion
 
 Whereas logistic regression can give important information for making inferences about the importance of the different variables and their effects, XGBoost and the SVC are not designed for making direct inferences. XGBoost and the SVC are primarily predictive models that focus on maximizing predictive accuracy.
@@ -874,7 +869,4 @@ Whereas logistic regression can give important information for making inferences
 Statistical learning, machine learning, R-programming, Tableau and data visualization.
 
 References:\
-Becker, Barry and Kohavi, Ronny. (1996). Adult. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20.
-James, G., Witten, D., Hastie, T. og Tibshirani, R. 2021. An Introduction to Statistical
-Learning (ISLR): with Applications in R. Available at: https://link.springer.com/content/pdf/10.
-1007/978-1-0716-1418-1.pdf.
+Becker, Barry and Kohavi, Ronny. (1996). Adult. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20. James, G., Witten, D., Hastie, T. og Tibshirani, R. 2021. An Introduction to Statistical Learning (ISLR): with Applications in R. Available at: https://link.springer.com/content/pdf/10. 1007/978-1-0716-1418-1.pdf.
