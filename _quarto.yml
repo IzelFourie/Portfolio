@@ -1,0 +1,30 @@
+project:
+  type: website
+  output-dir: docs
+  execute-dir: file
+
+website:
+  title: "Izel Fourie Sørensen"
+
+  navbar:
+      left:
+      - href: projects.qmd
+        text: Portfolio
+      - href: resume.qmd
+        text: Resume
+        
+      right:
+      - icon: github
+        href: https://github.com/IzelFourie
+      - icon: linkedin
+        href: https://linkedin.com/in/izel-fourie-sørensen
+format:
+  html:
+    code-fold: true
+    theme: cosmo
+    css: styles.css
+execute: 
+  warning: false
+  message: false
+editor: visual
+
