@@ -16,7 +16,7 @@ about:
 
 I am passionate about working with data to uncover meaningful insights that can inform decision-making. With a degree in Pharmacy, PhD in Pharmaceutical Chemistry and professional bachelor's degree in Data Analysis, I bring a solid foundation in both science and data analysis.
 
-Before formalizing my data analysis skills, I gained hands-on experience in using R for data cleaning and analysis through collaborations with scientists at Aarhus University. During these collaborations, I applied statistical prediction models to both human and fruit fly genetic data, predicting phenotypes based on genetic information. (Relevant publications are listed in my resume.)
+Before formalizing my data analysis skills, I gained hands-on experience in using R for data cleaning and analysis through collaborations with scientists at Aarhus University. During these collaborations, I applied statistical prediction models to both human and fruit fly genetic data, predicting phenotypes based on genetic information. (Relevant publications are listed in my [resume](docs/resume.html).)
 
 This work, in addition to my degree in data analysis, has equipped me with strong skills in utilizing R for data modeling, prediction, and interpretation.
 
