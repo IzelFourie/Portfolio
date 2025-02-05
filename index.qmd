@@ -8,7 +8,7 @@ about:
   links:
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com/in/izel-fourie-sørensen
+      href: https://linkedin.com/in/izel-fourie-sorensen
     - icon: github
       text: Github
       href: https://github.com/IzelFourie
