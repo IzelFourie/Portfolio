@@ -222,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="goal" class="level2">
 <h2 class="anchored" data-anchor-id="goal">Goal</h2>
 <p>In this post I use different statistical models for predicting whether a person’s annual income will exceed $50K a year based on data in the “Census Income” data set.</p>
-<div class="cell fig-cap-location-bottom" data-layout-align="left">
+<div class="cell" data-layout-align="left" data-fig-cap-location="bottom">
 
 </div>
 <div class="cell">
@@ -294,7 +294,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>df_test<span class="sc">$</span>income <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"."</span>, <span class="st">""</span>, df_test<span class="sc">$</span>income, <span class="at">fixed=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The data consists of variables. The training data consists of 32561 observations and the test data of 16281.</p>
+<p>The data consists of 15 variables. The training data consists of 32561 observations and the test data of 16281.</p>
 <p>Here is a quick view of what the data looks like.</p>
 <div class="cell">
 <details>
@@ -331,7 +331,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script type="text/javascript">                    
 var divElement = document.getElementById('viz1728455966947');
 var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
-
 <p>The figure below shows the distribution of ages for people earning more or less than $50,000 per year. There is a clear shift towards older age for earning above $50K. The curve suggests that in 1994 middle-aged individuals were more likely to have incomes above $50K.</p>
 <div class="cell">
 <details>
@@ -1181,8 +1180,7 @@ Move all countries with that have less than 10 observations in the training data
 <p>Statistical learning, machine learning, R-programming, Tableau and data visualization.</p>
 </section>
 <section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References:<br>
-</h2>
+<h2 class="anchored" data-anchor-id="references">References:</h2>
 <p>Becker, Barry and Kohavi, Ronny. (1996). Adult. UCI Machine Learning Repository. https://doi.org/10.24432/C5XW20.<br>
 James, G., Witten, D., Hastie, T. og Tibshirani, R. 2021. An Introduction to Statistical Learning (ISLR): with Applications in R. Available at: https://link.springer.com/content/pdf/10. 1007/978-1-0716-1418-1.pdf.</p>
 
